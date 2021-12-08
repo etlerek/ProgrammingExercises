@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>com.company</OriginalElement>
+  <nodes>
+    <node x="513.2829581993569" y="479.29903536977497">com.company.Kalkulator</node>
+    <node x="0.0" y="523.0">com.company.WczytajURL</node>
+    <node x="242.87037037037032" y="754.0">com.company.WyswietlWTerminalu</node>
+    <node x="217.99999999999997" y="128.0">com.company.Waluta</node>
+    <node x="259.8703703703703" y="905.0">com.company.Main</node>
+    <node x="255.49999999999997" y="0.0">com.company.IWaluta</node>
+    <node x="224.99999999999997" y="523.0">com.company.KolekcjaWalut</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="com.company.WyswietlWTerminalu" target="com.company.WczytajURL" relationship="DEPENDENCY">
+      <point x="-46.0" y="-50.5" />
+      <point x="288.8703703703703" y="733.0" />
+      <point x="156.37037037037032" y="733.0" />
+      <point x="156.37037037037032" y="723.0" />
+      <point x="102.0" y="723.0" />
+      <point x="0.0" y="62.0" />
+    </edge>
+    <edge source="com.company.WyswietlWTerminalu" target="com.company.Waluta" relationship="DEPENDENCY">
+      <point x="-46.0" y="-50.5" />
+      <point x="288.8703703703703" y="733.0" />
+      <point x="156.37037037037032" y="733.0" />
+      <point x="156.37037037037032" y="723.0" />
+      <point x="214.49999999999997" y="723.0" />
+      <point x="214.49999999999997" y="447.0" />
+      <point x="327.2777777777777" y="447.0" />
+      <point x="327.2777777777777" y="437.0" />
+      <point x="338.0" y="437.0" />
+      <point x="0.0" y="139.0" />
+    </edge>
+    <edge source="com.company.KolekcjaWalut" target="com.company.Waluta" relationship="TO_MANY">
+      <point x="59.0" y="-62.0" />
+      <point x="402.0" y="437.0" />
+      <point x="576.5" y="437.0" />
+      <point x="576.5" y="427.0" />
+      <point x="418.0" y="427.0" />
+      <point x="80.0" y="139.0" />
+    </edge>
+    <edge source="com.company.Kalkulator" target="com.company.Waluta" relationship="TO_ONE">
+      <point x="45.25" y="-117.0" />
+      <point x="649.0329581993569" y="437.0" />
+      <point x="576.5" y="437.0" />
+      <point x="576.5" y="427.0" />
+      <point x="418.0" y="427.0" />
+      <point x="80.0" y="139.0" />
+    </edge>
+    <edge source="com.company.Waluta" target="com.company.IWaluta" relationship="REALIZATION">
+      <point x="0.0" y="-139.0" />
+      <point x="0.0" y="39.0" />
+    </edge>
+    <edge source="com.company.Main" target="com.company.WyswietlWTerminalu" relationship="CREATE">
+      <point x="0.0" y="-39.5" />
+      <point x="0.0" y="50.5" />
+    </edge>
+    <edge source="com.company.WyswietlWTerminalu" target="com.company.Kalkulator" relationship="CREATE">
+      <point x="46.0" y="-50.5" />
+      <point x="380.8703703703703" y="733.0" />
+      <point x="455.3703703703703" y="733.0" />
+      <point x="455.3703703703703" y="723.0" />
+      <point x="603.7829581993569" y="723.0" />
+      <point x="0.0" y="117.0" />
+    </edge>
+    <edge source="com.company.KolekcjaWalut" target="com.company.Waluta" relationship="DEPENDENCY">
+      <point x="-59.0" y="-62.0" />
+      <point x="284.0" y="447.0" />
+      <point x="327.2777777777777" y="447.0" />
+      <point x="327.2777777777777" y="437.0" />
+      <point x="338.0" y="437.0" />
+      <point x="0.0" y="139.0" />
+    </edge>
+    <edge source="com.company.WczytajURL" target="com.company.Waluta" relationship="CREATE">
+      <point x="0.0" y="-62.0" />
+      <point x="102.0" y="437.0" />
+      <point x="258.0" y="437.0" />
+      <point x="-80.0" y="139.0" />
+    </edge>
+    <edge source="com.company.Kalkulator" target="com.company.Waluta" relationship="DEPENDENCY">
+      <point x="-45.25" y="-117.0" />
+      <point x="558.5329581993569" y="447.0" />
+      <point x="327.2777777777777" y="447.0" />
+      <point x="327.2777777777777" y="437.0" />
+      <point x="338.0" y="437.0" />
+      <point x="0.0" y="139.0" />
+    </edge>
+    <edge source="com.company.WyswietlWTerminalu" target="com.company.KolekcjaWalut" relationship="CREATE">
+      <point x="46.0" y="-50.5" />
+      <point x="380.8703703703703" y="733.0" />
+      <point x="455.3703703703703" y="733.0" />
+      <point x="455.3703703703703" y="723.0" />
+      <point x="343.0" y="723.0" />
+      <point x="0.0" y="62.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic" zoom="0.6195219123505976" showDependencies="true" x="331.0" y="492.0" />
+  <SelectedNodes>
+    <node>com.company.Kalkulator</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Constructors</Category>
+    <Category>Fields</Category>
+    <Category>Methods</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
