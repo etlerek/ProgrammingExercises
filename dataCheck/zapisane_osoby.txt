@@ -1,0 +1,6 @@
+0. Damian Madej [50.5, 33.0]
+1. Dwight Schrute [53.11, 23.61]
+2. Michael Scott [52.99, 22.99]
+3. Andy Bernard [53.123, 23.33]
+4. John Xina [52.923, 23.13]
+5. The Wok [52.923, 23.13]
