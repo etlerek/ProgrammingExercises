@@ -9,26 +9,33 @@ public class Server {
 
     public static void main(String[] args) throws IOException {
         ServerSocket serverSocket = new ServerSocket(5555);
-        Socket socket = serverSocket.accept();
 
+        System.out.println("Waiting for client");
+
+        Socket client = serverSocket.accept();
         System.out.println("Client connected");
 
-        PrintWriter printWriter = new PrintWriter(socket.getOutputStream());
-        InputStreamReader inputStreamReader = new InputStreamReader(socket.getInputStream());
-        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+        //Out String wychodzący, in String przychodzący
+        PrintWriter out = new PrintWriter(client.getOutputStream(), true);
+        BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 
+        //losowanie dwóch pierwszych kart krupiera
+        Card card1 = new Card("Ace", 11, "Spades");
+        out.println(card1.printCard());
+        Card card2 = new Card("Ace", 11, "Hearts");
+        out.println(card2.printCard());
+
+        // Odsyłanie klientowi czego sobie zażyczył
         while(true) {
 
-            String clientRequest = bufferedReader.readLine();
+            String clientRequest = in.readLine();
 
             if (clientRequest.equals("1")){
-                printWriter.println("Get: CARD");
+                out.println("Get: CARD");
             }
             if (clientRequest.equals("2")){
-                printWriter.println("Passed");
+                out.println("Passed");
             }
-
-            printWriter.flush();
         }
     }
 }
