@@ -6,38 +6,42 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.Buffer;
+import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Server {
 
     public static void main(String[] args) throws IOException {
+        ArrayList<ClientHandler> clients = new ArrayList<>();
+        ExecutorService pool = Executors.newFixedThreadPool(4);
         ServerSocket serverSocket = new ServerSocket(5555);
 
-        System.out.println("Waiting for client");
-
-        Socket client = serverSocket.accept();
-        System.out.println("Client connected");
-
-        //Out String wychodzący, in String przychodzący
-        PrintWriter out = new PrintWriter(client.getOutputStream(), true);
-        BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-
-        //losowanie dwóch pierwszych kart krupiera
-        Card card1 = new Card("Ace", 11, "Spades");
-        out.println(card1.printCard());
-        Card card2 = new Card("Ace", 11, "Hearts");
-        out.println(card2.printCard());
-
-        // Odsyłanie klientowi czego sobie zażyczył
         while(true) {
+            System.out.println("Waiting for client");
 
-            String clientRequest = in.readLine();
+            Socket socket = serverSocket.accept();
+            System.out.println("Client connected");
 
-            if (clientRequest.equals("1")){
-                out.println("Get: CARD");
+            try {
+                ClientHandler client = new ClientHandler(socket, clients);
+                clients.add(client);
+                pool.execute(client);
+
+            } catch (Exception e) {
+                System.out.println("CREATING THREAT " + e.getMessage());
             }
-            if (clientRequest.equals("2")){
-                out.println("Passed");
-            }
+
         }
+
+//        //Out String wychodzący, in String przychodzący
+//        PrintWriter out = new PrintWriter(client.getOutputStream(), true);
+//        BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
+//
+//        //losowanie dwóch pierwszych kart krupiera
+//        Card card1 = new Card("Ace", 11, "Spades");
+//        out.println(card1.printCard());
+//        Card card2 = new Card("Ace", 11, "Hearts");
+//        out.println(card2.printCard());
     }
 }

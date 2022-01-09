@@ -14,27 +14,24 @@ public class Client {
 
         Socket socket = new Socket("localhost", 5555);
 
+        ServerHandler server = new ServerHandler(socket);
+
+        new Thread(server).start();
+
         PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         BufferedReader keyboardIn = new BufferedReader(new InputStreamReader(System.in));
 
-        //dwie karty krupiera przychodza jako string
-        String card1 = in.readLine();
-        System.out.println(card1);
-        String card2 = in.readLine();
-        System.out.println(card2);
-        Hand dealerHand = new Hand();
-
         while(true) {
 
-            System.out.print("Type what you want to do:\n" +
+            System.out.println("Type what you want to do:\n" +
                     "1-hit\t 2-pass\t 0-quit");
             String choice = keyboardIn.readLine();
             if(choice.equals("1") || choice.equals("2")){
                 out.println(choice);
 
-            String serverInfo = in.readLine();
-            System.out.println(serverInfo);
+//            String serverInfo = in.readLine();
+//            System.out.println(serverInfo);
 
             }
 
