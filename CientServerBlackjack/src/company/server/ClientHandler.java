@@ -12,10 +12,14 @@ public class ClientHandler implements Runnable{
     private BufferedReader in;
     private PrintWriter out;
     private ArrayList<ClientHandler> clients;
+    private static int nextId = 0;
+    private int clientId;
 
     public ClientHandler(Socket client, ArrayList<ClientHandler> clients) throws Exception{
         this.client = client;
         this.clients = clients;
+        this.clientId = nextId;
+        nextId++;
         this.in = new BufferedReader(new InputStreamReader(this.client.getInputStream()));
         this.out = new PrintWriter(this.client.getOutputStream(), true);
     }
@@ -28,9 +32,8 @@ public class ClientHandler implements Runnable{
 
                 String clientRequest = in.readLine();
                 String outMessage;
-
+                printToEveryone("Player " + clientId +":");
                 if (clientRequest.equals("1")) {
-                    System.out.println("test");
                     printToEveryone("Get: CARD");
                 }
                 if (clientRequest.equals("2")) {

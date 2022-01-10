@@ -13,7 +13,6 @@ public class Client {
     public static void main(String[] args) throws IOException {
 
         Socket socket = new Socket("localhost", 5555);
-
         ServerHandler server = new ServerHandler(socket);
 
         new Thread(server).start();
@@ -29,10 +28,6 @@ public class Client {
             String choice = keyboardIn.readLine();
             if(choice.equals("1") || choice.equals("2")){
                 out.println(choice);
-
-//            String serverInfo = in.readLine();
-//            System.out.println(serverInfo);
-
             }
 
             else if(choice.equals("0"))

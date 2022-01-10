@@ -1,10 +1,13 @@
 package company.cards;
 
-public class Card implements ICard{
+public class Card implements ICard, ICardStates{
 
     private String name;
     private int value;
     private String color;
+
+
+    private State cardState = State.SHOWN;
 
     public Card(String name, int value, String color) {
         this.name = name;
@@ -26,4 +29,13 @@ public class Card implements ICard{
     public String printCard() {
         return name + " of " + color;
     }
+
+    public State getCardState() {
+        return cardState;
+    }
+
+    public void setCardState(State cardState) {
+        this.cardState = cardState;
+    }
+
 }

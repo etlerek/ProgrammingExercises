@@ -1,6 +1,7 @@
 package company.server;
 
 import company.cards.Card;
+import company.cards.Deck;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -17,9 +18,11 @@ public class Server {
         ExecutorService pool = Executors.newFixedThreadPool(4);
         ServerSocket serverSocket = new ServerSocket(5555);
 
+        Deck cardDeck = new Deck();
+        cardDeck.showCards();
+
         while(true) {
             System.out.println("Waiting for client");
-
             Socket socket = serverSocket.accept();
             System.out.println("Client connected");
 
@@ -29,19 +32,9 @@ public class Server {
                 pool.execute(client);
 
             } catch (Exception e) {
-                System.out.println("CREATING THREAT " + e.getMessage());
+                System.out.println("CREATING THREAT ERROR" + e.getMessage());
             }
 
         }
-
-//        //Out String wychodzący, in String przychodzący
-//        PrintWriter out = new PrintWriter(client.getOutputStream(), true);
-//        BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-//
-//        //losowanie dwóch pierwszych kart krupiera
-//        Card card1 = new Card("Ace", 11, "Spades");
-//        out.println(card1.printCard());
-//        Card card2 = new Card("Ace", 11, "Hearts");
-//        out.println(card2.printCard());
     }
 }
