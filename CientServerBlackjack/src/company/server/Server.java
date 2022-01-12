@@ -13,22 +13,31 @@ import java.util.concurrent.Executors;
 
 public class Server {
 
+
     public static void main(String[] args) throws IOException {
         ArrayList<ClientHandler> clients = new ArrayList<>();
         ExecutorService pool = Executors.newFixedThreadPool(4);
         ServerSocket serverSocket = new ServerSocket(5555);
 
         Deck cardDeck = new Deck();
-        cardDeck.showCards();
+//        cardDeck.showCards();
+
+        int control = 1;
 
         while(true) {
             System.out.println("Waiting for client");
             Socket socket = serverSocket.accept();
             System.out.println("Client connected");
 
+
             try {
                 ClientHandler client = new ClientHandler(socket, clients);
                 clients.add(client);
+                if(clients.size() >= 2)
+                {
+                    clients.get(clients.size()-2).setNextHandler(clients.get(clients.size()-1));
+                    clients.get(clients.size()-1).setNextHandler(clients.get(0));
+                }
                 pool.execute(client);
 
             } catch (Exception e) {
