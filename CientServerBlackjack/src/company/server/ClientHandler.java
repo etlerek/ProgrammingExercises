@@ -8,6 +8,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class ClientHandler implements Runnable{
+    private ClientState state;
     private Socket client;
     private BufferedReader in;
     private PrintWriter out;
@@ -20,6 +21,7 @@ public class ClientHandler implements Runnable{
         this.clients = clients;
         this.clientId = nextId;
         nextId++;
+        state = ClientState.PASSIVE;
         this.in = new BufferedReader(new InputStreamReader(this.client.getInputStream()));
         this.out = new PrintWriter(this.client.getOutputStream(), true);
     }
@@ -29,15 +31,25 @@ public class ClientHandler implements Runnable{
     public void run() {
         try {
             while (true) {
-
-                String clientRequest = in.readLine();
-                String outMessage;
-                printToEveryone("Player " + clientId +":");
-                if (clientRequest.equals("1")) {
-                    printToEveryone("Get: CARD");
-                }
-                if (clientRequest.equals("2")) {
-                    printToEveryone("Passed");
+                if(in.ready()){
+                    if(state == ClientState.PASSIVE) {
+                        out.println("jestes pasywny");
+                        in.readLine();
+                    }
+                    else {
+                        String clientRequest = in.readLine();
+                        out.println(("Type what you want to do:\n" +
+                                "1-hit\t 2-pass\t 0-quit"));
+                        printToEveryone("Player " + clientId + ":");
+                        if (clientRequest.equals("1")) {
+                            printToEveryone("Get: CARD");
+                        }
+                        if (clientRequest.equals("2")) {
+                            printToEveryone("Player: " + clientId + "Passed");
+                            Server.clientPassed(clientId);
+                            state = ClientState.PASSIVE;
+                        }
+                    }
                 }
             }
         }
@@ -58,5 +70,16 @@ public class ClientHandler implements Runnable{
     private void printToEveryone(String outMessage){
         for(ClientHandler client: clients)
             client.out.println(outMessage);
+    }
+
+    public void active(){
+        System.out.println("TURA GRACZA NR" + clientId);
+        state = ClientState.ACTIVE;
+        out.println(("Type what you want to do:\n" +
+                "1-hit\t 2-pass\t 0-quit"));
+    }
+
+    public boolean isActive(){
+        return state == ClientState.ACTIVE;
     }
 }

@@ -22,9 +22,10 @@ public class Client {
         BufferedReader keyboardIn = new BufferedReader(new InputStreamReader(System.in));
 
         while(true) {
+            if(in.ready()){
+                System.out.println("Wiadomość serwera: " + in.readLine());
+            }
 
-            System.out.println("Type what you want to do:\n" +
-                    "1-hit\t 2-pass\t 0-quit");
             String choice = keyboardIn.readLine();
             if(choice.equals("1") || choice.equals("2")){
                 out.println(choice);
