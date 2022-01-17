@@ -23,8 +23,6 @@ public class Client {
 
         while(true) {
             if(in.ready()){
-                System.out.println("Wiadomość serwera: " + in.readLine());
-                System.out.println("Wiadomość serwera: " + in.readLine());
             }
 
             String choice = keyboardIn.readLine();

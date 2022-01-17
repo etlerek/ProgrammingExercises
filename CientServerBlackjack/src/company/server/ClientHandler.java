@@ -45,7 +45,7 @@ public class ClientHandler implements Runnable{
             while (true) {
                 if(in.ready()){
                     if(state == ClientState.PASSIVE) {
-                        out.println("wait for your move");
+                        out.println("WAIT FOR YOUR TURN");
                         in.readLine();
                     }
                     else {
@@ -68,6 +68,10 @@ public class ClientHandler implements Runnable{
                                 }
                                 if (control > 0) {
                                     showHand("Player " + clientId +" get: " + card.printCard() + "| score: " + score);
+                                    out.println(("\n----------------------- \n" +
+                                            "Type what you want to do:\n" +
+                                            "1-hit\t 2-pass\t 0-quit\n" +
+                                            "----------------------- "));
                                 }
 
                                 if (control == 0){
@@ -118,8 +122,13 @@ public class ClientHandler implements Runnable{
     }
 
     public void active(){
+        System.out.println(state + " " + clientId + " in active");
         System.out.println("TURA GRACZA NR" + clientId);
         state = ClientState.ACTIVE;
+        out.println(("\n----------------------- \n" +
+                "Type what you want to do:\n" +
+                "1-hit\t 2-pass\t 0-quit\n" +
+                "----------------------- "));
     }
 
     public boolean isActive(){
@@ -144,13 +153,13 @@ public class ClientHandler implements Runnable{
                 printToEveryone(playerCards.printCard());
         }
 
-        System.out.println(state);
-        if(state != ClientState.PASSIVE) {
-            out.println(("\n----------------------- \n" +
-                    "Type what you want to do:\n" +
-                    "1-hit\t 2-pass\t 0-quit\n" +
-                    "----------------------- "));
-        }
+        System.out.println(state + " " + clientId + " in showHand");
+//        if(state == ClientState.ACTIVE) {
+//            out.println(("\n----------------------- \n" +
+//                    "Type what you want to do:\n" +
+//                    "1-hit\t 2-pass\t 0-quit\n" +
+//                    "----------------------- "));
+//        }
     }
 
     public int getClientId() {
