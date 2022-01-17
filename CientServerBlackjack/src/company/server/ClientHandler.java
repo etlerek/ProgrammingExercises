@@ -1,11 +1,17 @@
 package company.server;
 
+import company.cards.Card;
+import company.cards.Deck;
+import company.cards.Hand;
+import company.cards.ICardStates;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ClientHandler implements Runnable{
     private ClientState state;
@@ -13,8 +19,13 @@ public class ClientHandler implements Runnable{
     private BufferedReader in;
     private PrintWriter out;
     private ArrayList<ClientHandler> clients;
+    private List<Card> cardsInHand = new ArrayList<>();
     private static int nextId = 0;
+    private int score = 0;
     private int clientId;
+    private Card card = null;
+    private int control = 4;
+    private static final String CLEAR = new String(new char[80]).replace("\0", "\n");
 
     public ClientHandler(Socket client, ArrayList<ClientHandler> clients) throws Exception{
         this.client = client;
@@ -29,25 +40,59 @@ public class ClientHandler implements Runnable{
     // Odsyłanie klientowi czego sobie zażyczył
     @Override
     public void run() {
+        startOfRound();
         try {
             while (true) {
                 if(in.ready()){
                     if(state == ClientState.PASSIVE) {
-                        out.println("jestes pasywny");
+                        out.println("wait for your move");
                         in.readLine();
                     }
                     else {
                         String clientRequest = in.readLine();
-                        out.println(("Type what you want to do:\n" +
-                                "1-hit\t 2-pass\t 0-quit"));
-                        printToEveryone("Player " + clientId + ":");
                         if (clientRequest.equals("1")) {
-                            printToEveryone("Get: CARD");
+                            card = Deck.getCard();
+                            if (card != null)
+                            {
+                                score += card.getValue();
+                                cardsInHand.add(card);
+                                while(score > 21 && control > 0) {
+                                    for (Card playerCard : cardsInHand){
+                                        if (playerCard.getName().equals("Ace") && playerCard.getCardState().equals(ICardStates.State.SHOWN)) {
+                                            score -= 10;
+                                            playerCard.setCardState(ICardStates.State.LOVERED);
+                                            break;
+                                        }
+                                    }
+                                control -= 1;
+                                }
+                                if (control > 0) {
+                                    showHand("Player " + clientId +" get: " + card.printCard() + "| score: " + score);
+                                }
+
+                                if (control == 0){
+                                    showHand("Player " + clientId +" get: " + card.printCard() + " and LOST | score: " + score);
+                                    control = 4;
+                                    Server.clientPassed(clientId);
+                                    state = ClientState.PASSIVE;
+                                    out.println("\nYOU HAVE LOST!!! :(\n");
+                                }
+                                if(score == 21){
+                                    showHand("Player " + clientId +" got 21!!!");
+                                    out.println("\nWOOOOW CONGRATULATIONS\n");
+                                    control = 4;
+                                    Server.clientPassed(clientId);
+                                    state = ClientState.PASSIVE;
+                                }
+                            }
+
                         }
                         if (clientRequest.equals("2")) {
-                            printToEveryone("Player: " + clientId + "Passed");
+                            showHand("Player " + clientId +" passed");
+                            control = 4;
                             Server.clientPassed(clientId);
                             state = ClientState.PASSIVE;
+                            out.println("\nYOU HAVE PASSED\n");
                         }
                     }
                 }
@@ -75,11 +120,44 @@ public class ClientHandler implements Runnable{
     public void active(){
         System.out.println("TURA GRACZA NR" + clientId);
         state = ClientState.ACTIVE;
-        out.println(("Type what you want to do:\n" +
-                "1-hit\t 2-pass\t 0-quit"));
     }
 
     public boolean isActive(){
         return state == ClientState.ACTIVE;
+    }
+
+    public void startOfRound(){
+        card = Deck.getCard();
+        cardsInHand.add(card);
+        score += card.getValue();
+        card = Deck.getCard();
+        cardsInHand.add(card);
+        score += card.getValue();
+        showHand("");
+    }
+
+    public void showHand(String message){
+        printToEveryone(CLEAR + message);
+        for(ClientHandler aClinet: clients) {
+            printToEveryone("-----------------------------------------\nPLAYER " + aClinet.getClientId() + "\t| SCORE: " + aClinet.score);
+            for (Card playerCards : aClinet.cardsInHand)
+                printToEveryone(playerCards.printCard());
+        }
+
+        System.out.println(state);
+        if(state != ClientState.PASSIVE) {
+            out.println(("\n----------------------- \n" +
+                    "Type what you want to do:\n" +
+                    "1-hit\t 2-pass\t 0-quit\n" +
+                    "----------------------- "));
+        }
+    }
+
+    public int getClientId() {
+        return clientId;
+    }
+
+    public List<Card> getCardsInHand() {
+        return cardsInHand;
     }
 }

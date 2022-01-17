@@ -1,11 +1,10 @@
 package company.cards;
 
-public class Card implements ICard, ICardStates{
+public class Card implements  ICard, ICardStates{
 
     private String name;
     private int value;
     private String color;
-
 
     private State cardState = State.SHOWN;
 

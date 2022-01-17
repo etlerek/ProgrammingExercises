@@ -41,9 +41,7 @@ public class Server {
         ServerSocket serverSocket = new ServerSocket(5555);
         Scanner scanner = new Scanner(System.in);
 
-
         Deck cardDeck = new Deck();
-
 
         while(askForClient(scanner)) {
             System.out.println("Waiting for client");

@@ -3,7 +3,8 @@ package company.cards;
 public interface ICardStates {
     enum State{
         HIDDEN,
-        SHOWN;
+        SHOWN,
+        LOVERED;
     }
 
     State getCardState();

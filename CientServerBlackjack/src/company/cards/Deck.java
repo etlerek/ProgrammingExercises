@@ -5,7 +5,7 @@ import java.util.Collections;
 
 public class Deck implements ICardDeck{
 
-    private ArrayList<Card> deckOfCards = new ArrayList<>();
+    private static ArrayList<Card> deckOfCards = new ArrayList<>();
 
     public Deck(){
         makeDeckOfCards();
@@ -21,9 +21,15 @@ public class Deck implements ICardDeck{
         deckOfCards.add(card);
     }
 
-    @Override
-    public void removeCard() {
+
+    public static void removeCard() {
         deckOfCards.remove(0);
+    }
+
+    public static Card getCard(){
+        Card cardToGet = deckOfCards.get(0);
+        removeCard();
+        return cardToGet;
     }
 
     @Override
@@ -56,10 +62,10 @@ public class Deck implements ICardDeck{
         deckOfCards.add(new Card("King", 10, "hearts"));
         deckOfCards.add(new Card("King", 10, "diamonds"));
         deckOfCards.add(new Card("King", 10, "clubs"));
-        deckOfCards.add(new Card("Ace", 1, "spades"));
-        deckOfCards.add(new Card("Ace", 1, "hearts"));
-        deckOfCards.add(new Card("Ace", 1, "diamonds"));
-        deckOfCards.add(new Card("Ace", 1, "clubs"));
+        deckOfCards.add(new Card("Ace", 11, "spades"));
+        deckOfCards.add(new Card("Ace", 11, "hearts"));
+        deckOfCards.add(new Card("Ace", 11, "diamonds"));
+        deckOfCards.add(new Card("Ace", 11, "clubs"));
         shuffle();
     }
 }
