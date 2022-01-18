@@ -26,6 +26,10 @@ public class Card implements  ICard, ICardStates{
 
     @Override
     public String printCard() {
+        if (cardState == State.HIDDEN)
+        {
+            return "HIDDEN";
+        }
         return name + " of " + color;
     }
 

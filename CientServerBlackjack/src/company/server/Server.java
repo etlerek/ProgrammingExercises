@@ -1,13 +1,10 @@
 package company.server;
 
-import company.cards.Card;
 import company.cards.Deck;
 
-import java.awt.*;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Scanner;
@@ -18,6 +15,7 @@ public class Server {
 
     public static ArrayList<ClientHandler> clients = new ArrayList<>();
     public static ExecutorService pool = Executors.newFixedThreadPool(4);
+    public static Dealer dealer = new Dealer();
 
     public static boolean askForClient(Scanner scanner){
         System.out.println("Czy poczekac na kolejnego klienta?(t/n)");
@@ -25,14 +23,38 @@ public class Server {
         return choice.toLowerCase(Locale.ROOT).equals("t");
     }
 
+    public static void roundStart(){
+        Deck.retrieveAll();
+        dealer.resetScore();
+        Dealer.dealersHand.clear();
+        dealer.addCard(Deck.getCard());
+        dealer.addCard(Deck.getCard(1));
+        ClientHandler.increaseRound();
+        for(ClientHandler aClinet: clients){
+            aClinet.startOfRound();
+        }
+    }
+
     public static void clientPassed(int id) {
-        if(clients.size()-1 == id) {
-            //TODO Odpalić trzeba bedzie krupiera tutaj
-            System.out.println("Odpalić trzeba bedzie krupiera tutaj");
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        if(clients.size()==1){
+            dealer.dealersTurn();
+            roundStart();
             clients.get(0).active();
         }
         else {
-            clients.get(id + 1).active();
+            if (clients.size() - 1 == id) {
+                //TODO Odpalić trzeba bedzie krupiera tutaj
+                dealer.dealersTurn();
+                roundStart();
+                clients.get(0).active();
+            } else {
+                clients.get(id + 1).active();
+            }
         }
     }
 
@@ -41,6 +63,9 @@ public class Server {
         ServerSocket serverSocket = new ServerSocket(5555);
         Scanner scanner = new Scanner(System.in);
         Deck cardDeck = new Deck();
+
+        dealer.addCard(Deck.getCard());
+        dealer.addCard(Deck.getCard(1));
 
         while(askForClient(scanner)) {
             System.out.println("Waiting for client");
@@ -63,7 +88,6 @@ public class Server {
         }
 
         clients.get(0).active();
-
     }
 }
 

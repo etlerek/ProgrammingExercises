@@ -12,11 +12,6 @@ public class Deck implements ICardDeck{
     }
 
     @Override
-    public void shuffle() {
-        Collections.shuffle(deckOfCards);
-    }
-
-    @Override
     public void addCard(Card card) {
         deckOfCards.add(card);
     }
@@ -32,18 +27,19 @@ public class Deck implements ICardDeck{
         return cardToGet;
     }
 
-    @Override
-    public void retrieveAll() {
+    public static Card getCard(int choice){
+        Card cardToGet = deckOfCards.get(0);
+        cardToGet.setCardState(ICardStates.State.HIDDEN);
+        removeCard();
+        return cardToGet;
+    }
+
+    public static void retrieveAll() {
         deckOfCards.clear();
         makeDeckOfCards();
     }
 
-    public void showCards(){
-        for(Card card: deckOfCards)
-            System.out.println(card.printCard());
-    }
-
-    public void makeDeckOfCards(){
+    public static void makeDeckOfCards(){
         for(Integer j = 2; j < 11; j++) {
             deckOfCards.add(new Card(j.toString(), j, "spades"));
             deckOfCards.add(new Card(j.toString(), j, "hearts"));
@@ -66,6 +62,6 @@ public class Deck implements ICardDeck{
         deckOfCards.add(new Card("Ace", 11, "hearts"));
         deckOfCards.add(new Card("Ace", 11, "diamonds"));
         deckOfCards.add(new Card("Ace", 11, "clubs"));
-        shuffle();
+        Collections.shuffle(deckOfCards);
     }
 }
