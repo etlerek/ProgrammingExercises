@@ -15,9 +15,8 @@ import java.util.List;
 import static company.server.Dealer.dealersHand;
 
 public class ClientHandler implements Runnable{
-    private static int round = 0;
-    private ClientState state;
-    private ClientState winnerState = null;
+    private static int round = 1;
+    public ClientState state;
     private Socket client;
     private BufferedReader in;
     private PrintWriter out;
@@ -49,7 +48,6 @@ public class ClientHandler implements Runnable{
                 if(in.ready()){
                     if(state == ClientState.PASSIVE) {
                         out.println("WAIT FOR YOUR TURN");
-                        System.out.println(state);
                         in.readLine();
                     }
                     else {
@@ -72,10 +70,8 @@ public class ClientHandler implements Runnable{
                                 }
                                 if (control > 0) {
                                     showHand("Player " + clientId +" get: " + card.printCard() + "| score: " + score);
-                                    out.println(("\n----------------------- \n" +
-                                            "Type what you want to do:\n" +
-                                            "1-hit\t 2-pass\t 0-quit\n" +
-                                            "----------------------- "));
+                                    out.println(("Type what you want to do:\n" +
+                                            "1-hit\t 2-pass\t 0-quit\n"));
                                     control = 4;
                                 }
 
@@ -99,10 +95,10 @@ public class ClientHandler implements Runnable{
                         }
                         if (clientRequest.equals("2")) {
                             showHand("Player " + clientId +" passed");
-                            control = 4;
-                            Server.clientPassed(clientId);
-                            state = ClientState.PASSIVE;
                             out.println("\nYOU HAVE PASSED\n");
+                            control = 4;
+                            state = ClientState.PASSIVE;
+                            Server.clientPassed(clientId);
                         }
                     }
                 }
@@ -130,15 +126,9 @@ public class ClientHandler implements Runnable{
     public void active(){
         System.out.println("TURA GRACZA NR" + clientId);
         state = ClientState.ACTIVE;
-        System.out.println(state);
-        out.println(("\n----------------------- \n" +
+        out.println(("\n///////////////////////////\n" +
                 "Type what you want to do:\n" +
-                "1-hit\t 2-pass\t 0-quit\n" +
-                "----------------------- "));
-    }
-
-    public boolean isActive(){
-        return state == ClientState.ACTIVE;
+                "1-hit\t 2-pass\t 0-quit\n"));
     }
 
     public void startOfRound(){
@@ -154,13 +144,13 @@ public class ClientHandler implements Runnable{
     }
 
     public void showHand(String message){
-        printToEveryone(CLEAR + "ROUND: " + round + "\n"+ message);
-        printToEveryone("-----------------------------------------\nDEALER \t\t| SCORE: " + Dealer.getScore());
+        printToEveryone(CLEAR + "ROUND: " + round + "\n\n"+ message+ "\n");
+        printToEveryone("-----------------------------------------\nDEALER \t\t\t\t\t\t| SCORE: " + Dealer.getScore());
         for(Card aCard: dealersHand) {
             printToEveryone(aCard.printCard());
         }
         for(ClientHandler aClinet: clients) {
-            printToEveryone("-----------------------------------------\nPLAYER " + aClinet.getClientId() + "\t\t| SCORE: " + aClinet.score);
+            printToEveryone("-----------------------------------------\nPLAYER " + aClinet.getClientId() + "\t\t\t\t\t| SCORE: " + aClinet.score);
             for (Card playerCards : aClinet.cardsInHand)
                 printToEveryone(playerCards.printCard());
         }
@@ -170,44 +160,12 @@ public class ClientHandler implements Runnable{
         return clientId;
     }
 
-    public List<Card> getCardsInHand() {
-        return cardsInHand;
-    }
-
-    public ArrayList<ClientHandler> getClients() {
-        return clients;
-    }
-
-    public void setClients(ArrayList<ClientHandler> clients) {
-        this.clients = clients;
-    }
-
-    public void setCardsInHand(List<Card> cardsInHand) {
-        this.cardsInHand = cardsInHand;
-    }
-
-    public void setClientId(int clientId) {
-        this.clientId = clientId;
-    }
-
     public int getScore(){
         return score;
     }
 
     public void showWhoWin(String message){
         out.println(message);
-    }
-
-    public ClientState getWinnerState() {
-        return winnerState;
-    }
-
-    public void addCard(Card card){
-        cardsInHand.add(card);
-    }
-
-    public void resetScore(){
-        score = 0;
     }
 
     public static void increaseRound() {

@@ -57,11 +57,11 @@ public class Dealer{
         if(score <= 21) {
             for (ClientHandler client : clients) {
                 if (client.getScore() > score && client.getScore() <= 21)
-                    client.showWhoWin("YOU HAVE WON!!!");
+                    client.showWhoWin("\n\nYOU HAVE WON!!!");
                 else if (client.getScore() == score)
-                    client.showWhoWin("YOU HAVE TIED");
+                    client.showWhoWin("\n\nYOU HAVE TIED");
                 else
-                    client.showWhoWin("YOU HAVE LOST");
+                    client.showWhoWin("\n\nYOU HAVE LOST");
             }
         }
         try {
